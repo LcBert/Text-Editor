@@ -1,0 +1,18 @@
+{
+    "menubar.file": "File",
+    "menubar.file.open": "Apri",
+    "menubar.file.save": "Salva",
+    "menubar.file.saveas": "Salva con nome",
+    "menubar.file.close": "Chiudi",
+    "menubar.file.explorer": "Mostra in Esplora Risorse",
+    "menubar.file.exit": "Esci",
+    "menubar.format": "Formato",
+    "menubar.format.wrap": "A capo automatico",
+    "menubar.format.wrap.word": "Parola",
+    "menubar.format.wrap.char": "Carattere",
+    "menubar.format.wrap.none": "Nessuno",
+    "menubar.format.language": "Lingua",
+    "editor.statusmessage.open": "File %s aperto",
+    "editor.statusmessage.save": "File %s salvato",
+    "editor.statusmessage.filenotfound": "Nessun file aperto"
+}
