@@ -5,6 +5,7 @@
     "menubar.file.saveas": "Guardar como",
     "menubar.file.close": "Cerrar",
     "menubar.file.explorer": "Mostrar en el Explorador",
+    "menubar.file.recent": "Archivos Recientes",
     "menubar.file.exit": "Salir",
     "menubar.format": "Formato",
     "menubar.format.wrap": "Ajustar contenido",

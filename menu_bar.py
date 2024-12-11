@@ -5,12 +5,16 @@ from tkinter import ttk
 def __file_menu(app: Tk, menubar: Menu, lang: dict) -> Menu:
     file_menu = Menu(menubar, tearoff=0)
 
+    file_recent_submenu = Menu(file_menu, tearoff=0)
+    # file_recent_submenu.add_command(label="file1.txt", command=lambda: app.open_file("file1.txt"))
+
     file_menu.add_command(label=lang.get("menubar.file.open"), command=app.open_file)
     file_menu.add_command(label=lang.get("menubar.file.save"), command=app.save_file)
     file_menu.add_command(label=lang.get("menubar.file.saveas"), command=app.save_as_file)
     file_menu.add_command(label=lang.get("menubar.file.close"), command=app.close_file)
     file_menu.add_separator()
     file_menu.add_command(label=lang.get("menubar.file.explorer"), command=app.show_in_explorer)
+    file_menu.add_cascade(label=lang.get("menubar.file.recent"), menu=file_recent_submenu)
     file_menu.add_separator()
     file_menu.add_command(label=lang.get("menubar.file.exit"), command=app.quit)
 
@@ -44,8 +48,7 @@ def __help_menu(app: Tk, menubar: Menu, lang: dict) -> Menu:
     return help_menu
 
 
-def create_menu(app: Tk, lang: dict):
-
+def create_menu(app: Tk, lang: dict) -> Menu:
     menubar = Menu(app)
     app.config(menu=menubar)
 
@@ -53,14 +56,14 @@ def create_menu(app: Tk, lang: dict):
     menubar.add_cascade(label=lang.get("menubar.format"), menu=__format_menu(app, menubar, lang))
     menubar.add_cascade(label=lang.get("menubar.help"), menu=__help_menu(app, menubar, lang))
 
+    return menubar
 
-info_content = [
-    "Version 1.0",
-    "Author: Luca Bertaggia"
-]
 
-# TODO: Fix content position
 def __help_show_about(app: Tk, lang: dict):
+    info_content = [
+        "Version 1.0",
+        "Author: Luca Bertaggia"
+    ]
     about_window = Toplevel(app)
     about_window.title(lang.get("menubar.help.about"))
     about_window.geometry("300x150")

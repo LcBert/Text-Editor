@@ -5,6 +5,7 @@
     "menubar.file.saveas": "Save as",
     "menubar.file.close": "Close",
     "menubar.file.explorer": "Show in Explorer",
+    "menubar.file.recent": "Recent Files",
     "menubar.file.exit": "Exit",
     "menubar.format": "Format",
     "menubar.format.wrap": "Wrap Content",

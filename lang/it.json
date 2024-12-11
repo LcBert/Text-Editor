@@ -5,6 +5,7 @@
     "menubar.file.saveas": "Salva con nome",
     "menubar.file.close": "Chiudi",
     "menubar.file.explorer": "Mostra in Esplora Risorse",
+    "menubar.file.recent": "File recenti",
     "menubar.file.exit": "Esci",
     "menubar.format": "Formato",
     "menubar.format.wrap": "A capo automatico",

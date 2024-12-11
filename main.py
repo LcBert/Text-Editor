@@ -10,35 +10,39 @@ app: Tk = None
 
 
 class App(Tk):
-    def __init__(self):
+    def __init__(self, wrap_mode: Literal["word", "char", "none"] = "word", text: str = "", file=None):
         super().__init__()
 
-        self.file = None
+        self.file = file
         self.filetypes = [
             ("Text files", "*.txt"),
             ("All files", "*.*")
         ]
+
+        # Load language file #
         self.lang_type = f"{json.load(open("settings.json")).get("app_lang")}.json"
         self.lang_dict = json.load(open(f"lang/{self.lang_type}"))
 
-        self.title("Text Editor")
+        self.title("Text Editor" + (" - " + self.file.name.split("/")[-1] if self.file is not None else ""))
         self.geometry("600x400")
         self.iconbitmap("img/appicon.ico")
 
         self.grid_columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
-        menu_bar.create_menu(self, self.lang_dict)
+        self.menubar: Menu = menu_bar.create_menu(self, self.lang_dict)
+        # print(self.menubar.children["!menu"].children["!menu"]) #TODO: Fix this
 
         self.editor_entry = Text(
             self,
             font="Consolas 12",
-            wrap="word",
+            wrap=wrap_mode,
             undo=True,
             insertofftime=400,
             insertontime=900
         )
         self.editor_entry.grid(column=0, row=0, sticky="nsew")
+        self.editor_entry.insert("1.0", text)
         self.editor_entry.focus()
         self.editor_entry_scrollbar = Scrollbar(
             self,
@@ -57,26 +61,38 @@ class App(Tk):
         self.status_label = Label(self.status_frame, width=50, anchor="w")
         self.status_label.grid(column=0, row=0, sticky="w")
 
+        ttk.Separator(self.status_frame, orient="vertical").grid(column=0, row=0, sticky="ns")
+
     def change_language(self, lang: str):
         with open("settings.json", "r") as settings_file:
             settings = json.load(settings_file)
             settings["app_lang"] = lang
         with open("settings.json", "w") as settings_file:
             settings_file.write(json.dumps(settings))
-
         self.restart()
+
+    def add_file_to_recent(self, file: str):
+        with open("settings.json", "r") as settings_file:
+            settings = json.load(settings_file)
+            settings["recent_files"].append(file)
+        with open("settings.json", "w") as settings_file:
+            settings_file.write(json.dumps(settings))
 
     def edit_wrap_content(self, wrap_mode: Literal["word", "char", "none"]):
         self.editor_entry.config(wrap=wrap_mode)
 
-    def open_file(self):
-        opened_file = filedialog.askopenfile(filetypes=self.filetypes, mode="r")
+    def open_file(self, args_file=None):
+        if (args_file is None):
+            opened_file = filedialog.askopenfile(filetypes=self.filetypes, mode="r")
+        else:
+            opened_file = open(args_file, "r")
         if (opened_file is not None):
             self.file = opened_file
             self.title("Text Editor - " + self.file.name.split("/")[-1])
             self.editor_entry.delete("1.0", "end")
             self.editor_entry.insert("1.0", self.file.read())
             self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.open") % self.file.name.split("/")[-1])
+            self.add_file_to_recent(self.file.name)
 
     def save_file(self):
         text = self.editor_entry.get("1.0", "end").strip()
@@ -97,6 +113,7 @@ class App(Tk):
             self.file.write(text)
             self.file.flush()
             self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.save") % self.file.name.split("/")[-1])
+            self.add_file_to_recent(self.file.name)
 
     def close_file(self):
         if (self.file is not None):
@@ -116,9 +133,12 @@ class App(Tk):
         self.status_label.config(text=message, fg=color)
 
     def restart(self):
+        wrap_mode = self.editor_entry.cget("wrap")
+        text = self.editor_entry.get("1.0", "end").strip()
+        file = self.file
         self.destroy()
         global app
-        app = App()
+        app = App(wrap_mode, text, file)
         app.start()
 
     def start(self):
