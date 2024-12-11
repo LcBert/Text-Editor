@@ -13,9 +13,13 @@
     "menubar.format.wrap.char": "Carattere",
     "menubar.format.wrap.none": "Nessuno",
     "menubar.format.language": "Lingua",
+    "menubar.format.font": "Stile del testo",
     "menubar.help": "Aiuto",
     "menubar.help.about": "Informazioni",
     "editor.statusmessage.open": "File %s aperto",
     "editor.statusmessage.save": "File %s salvato",
-    "editor.statusmessage.filenotfound": "Nessun file aperto"
+    "editor.statusmessage.filenotfound": "Nessun file aperto",
+    "font_page.label.font": "Tipo di carattere",
+    "font_page.label.style": "Stile",
+    "font_page.label.size": "Grandezza"
 }

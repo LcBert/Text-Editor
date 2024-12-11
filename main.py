@@ -1,82 +1,62 @@
 from tkinter import *
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog
 from typing import Literal
 import subprocess
 import json
 
 import menu_bar
+import editor_entry
+import status_frame
 
 app: Tk = None
 
 
 class App(Tk):
-    def __init__(self, wrap_mode: Literal["word", "char", "none"] = "word", text: str = "", file=None):
+    def __init__(self):
         super().__init__()
 
-        self.file = file
+        self.file = None
         self.filetypes = [
             ("Text files", "*.txt"),
             ("All files", "*.*")
         ]
+        self.wrap_mode = "word"
+        self.text = ""
 
-        # Load language file #
-        self.lang_type = f"{json.load(open("settings.json")).get("app_lang")}.json"
-        self.lang_dict = json.load(open(f"lang/{self.lang_type}"))
+        self.load_settings()
 
         self.title("Text Editor" + (" - " + self.file.name.split("/")[-1] if self.file is not None else ""))
-        self.geometry("600x400")
+        self.geometry("600x400+100+100")
         self.iconbitmap("img/appicon.ico")
 
         self.grid_columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
-        self.menubar: Menu = menu_bar.create_menu(self, self.lang_dict)
-        # print(self.menubar.children["!menu"].children["!menu"]) #TODO: Fix this
+        self.create_widgets()
 
-        self.editor_entry = Text(
-            self,
-            font="Consolas 12",
-            wrap=wrap_mode,
-            undo=True,
-            insertofftime=400,
-            insertontime=900
-        )
-        self.editor_entry.grid(column=0, row=0, sticky="nsew")
-        self.editor_entry.insert("1.0", text)
-        self.editor_entry.focus()
-        self.editor_entry_scrollbar = Scrollbar(
-            self,
-            orient="vertical",
-            jump=1
-        )
-        self.editor_entry_scrollbar.grid(column=1, row=0, sticky="ns")
-        self.editor_entry_scrollbar.config(command=self.editor_entry.yview)
-        self.editor_entry.config(yscrollcommand=self.editor_entry_scrollbar.set)
+    # Load Settings File #
+    def load_settings(self, file=None, wrap_mode: Literal["word", "char", "none"] = "word", text: str = ""):
+        self.file = file
+        self.wrap_mode = wrap_mode
+        self.text = text
+        with open("settings.json", "r") as settings_file:
+            file_dict: dict = json.load(settings_file)
+            self.lang_dict = json.load(open(f"lang/{file_dict.get("app.lang")}.json"))
+            self.font = file_dict.get("app.font")
 
+    def create_widgets(self):
+        self.menubar: Menu = menu_bar.create_menu(self)
+        self.editor_entry, self.editor_entry_scrollbar = editor_entry.create_editor_entry(self)
         ttk.Separator(self, orient="horizontal").grid(column=0, row=1, sticky="ew", columnspan=2)
-
-        self.status_frame = Frame(self, height=20, borderwidth=1)
-        self.status_frame.grid(column=0, row=2, sticky="ew")
-
-        self.status_label = Label(self.status_frame, width=50, anchor="w")
-        self.status_label.grid(column=0, row=0, sticky="w")
-
-        ttk.Separator(self.status_frame, orient="vertical").grid(column=0, row=0, sticky="ns")
+        self.status_frame, self.status_label = status_frame.create_status_frame(self)
 
     def change_language(self, lang: str):
         with open("settings.json", "r") as settings_file:
             settings = json.load(settings_file)
-            settings["app_lang"] = lang
+            settings["app.lang"] = lang
         with open("settings.json", "w") as settings_file:
             settings_file.write(json.dumps(settings))
         self.restart()
-
-    def add_file_to_recent(self, file: str):
-        with open("settings.json", "r") as settings_file:
-            settings = json.load(settings_file)
-            settings["recent_files"].append(file)
-        with open("settings.json", "w") as settings_file:
-            settings_file.write(json.dumps(settings))
 
     def edit_wrap_content(self, wrap_mode: Literal["word", "char", "none"]):
         self.editor_entry.config(wrap=wrap_mode)
@@ -92,7 +72,6 @@ class App(Tk):
             self.editor_entry.delete("1.0", "end")
             self.editor_entry.insert("1.0", self.file.read())
             self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.open") % self.file.name.split("/")[-1])
-            self.add_file_to_recent(self.file.name)
 
     def save_file(self):
         text = self.editor_entry.get("1.0", "end").strip()
@@ -113,7 +92,6 @@ class App(Tk):
             self.file.write(text)
             self.file.flush()
             self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.save") % self.file.name.split("/")[-1])
-            self.add_file_to_recent(self.file.name)
 
     def close_file(self):
         if (self.file is not None):
@@ -133,13 +111,13 @@ class App(Tk):
         self.status_label.config(text=message, fg=color)
 
     def restart(self):
+        file = self.file
         wrap_mode = self.editor_entry.cget("wrap")
         text = self.editor_entry.get("1.0", "end").strip()
-        file = self.file
-        self.destroy()
-        global app
-        app = App(wrap_mode, text, file)
-        app.start()
+        for child in self.winfo_children():
+            child.destroy()
+        self.load_settings(file, wrap_mode, text)
+        self.create_widgets()
 
     def start(self):
         self.mainloop()
