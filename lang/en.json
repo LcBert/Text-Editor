@@ -19,6 +19,7 @@
     "editor.statusmessage.open": "File %s opened",
     "editor.statusmessage.save": "File %s saved",
     "editor.statusmessage.filenotfound": "No file opened",
+    "editor.exit.ask_save": "Save Changes?",
     "font_page.label.font": "Font",
     "font_page.label.style": "Style",
     "font_page.label.size": "Size"

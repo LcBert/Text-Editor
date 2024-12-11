@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk, filedialog
+from tkinter import ttk, filedialog, messagebox
 from typing import Literal
 import subprocess
 import json
@@ -28,6 +28,7 @@ class App(Tk):
         self.title("Text Editor" + (" - " + self.file.name.split("/")[-1] if self.file is not None else ""))
         self.geometry("600x400+100+100")
         self.iconbitmap("img/appicon.ico")
+        self.protocol("WM_DELETE_WINDOW", self.xquit)
 
         self.grid_columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
@@ -118,6 +119,26 @@ class App(Tk):
             child.destroy()
         self.load_settings(file, wrap_mode, text)
         self.create_widgets()
+
+    def ask_save_on_exit(self):
+        ask_exit: bool = messagebox.askyesnocancel("Text Editor", self.lang_dict.get("editor.exit.ask_save"))
+        if (ask_exit is True):
+            self.save_file()
+            self.quit()
+        elif (ask_exit is False):
+            self.quit()
+
+    def xquit(self):
+        if (self.file is not None):
+            with (open(self.file.name, "r")) as file:
+                if (self.editor_entry.get("1.0", "end").strip() != file.read()):
+                    self.ask_save_on_exit()
+                else:
+                    self.quit()
+        elif (self.editor_entry.get("1.0", "end").strip() != ""):
+            self.ask_save_on_exit()
+        else:
+            self.quit()
 
     def start(self):
         self.mainloop()

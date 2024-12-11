@@ -13,7 +13,7 @@ def __file_menu(app: Tk, menubar: Menu) -> Menu:
     file_menu.add_separator()
     file_menu.add_command(label=app.lang_dict.get("menubar.file.explorer"), command=app.show_in_explorer)
     file_menu.add_separator()
-    file_menu.add_command(label=app.lang_dict.get("menubar.file.exit"), command=app.quit)
+    file_menu.add_command(label=app.lang_dict.get("menubar.file.exit"), command=app.xquit)
 
     return file_menu
 
