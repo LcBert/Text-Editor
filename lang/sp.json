@@ -12,6 +12,8 @@
     "menubar.format.wrap.char": "Carácter",
     "menubar.format.wrap.none": "Ninguno",
     "menubar.format.language": "Idioma",
+    "menubar.help": "Ayuda",
+    "menubar.help.about": "Información",
     "editor.statusmessage.open": "Archivo %s abierto",
     "editor.statusmessage.save": "Archivo %s guardado",
     "editor.statusmessage.filenotfound": "Ningún archivo abierto"

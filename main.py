@@ -10,7 +10,6 @@ app: Tk = None
 
 
 class App(Tk):
-
     def __init__(self):
         super().__init__()
 
