@@ -28,7 +28,13 @@ class App(Tk):
         self.title("Text Editor" + (" - " + self.file.name.split("/")[-1] if self.file is not None else ""))
         self.geometry("600x400+100+100")
         self.iconbitmap("img/appicon.ico")
-        self.protocol("WM_DELETE_WINDOW", self.xquit)
+        self.protocol("WM_DELETE_WINDOW", self.xquit)  # Handle exit with X window button
+
+        self.bind("<Control-o>", lambda event: self.open_file())  # Control + O -> Open File
+        self.bind("<Control-s>", lambda event: self.save_file())  # Control + S -> Save File
+        self.bind("<Control-S>", lambda event: self.save_as_file())  # Control + Shift + S -> Save File
+        self.bind("<Control-q>", lambda event: self.close_file())  # Control + Q -> Close File
+        self.bind("<Control-e>", lambda event: self.show_in_explorer())  # Control + E -> Show in Explorer
 
         self.grid_columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
