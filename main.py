@@ -81,7 +81,11 @@ class App(Tk):
         if (args_file is None):
             opened_file = filedialog.askopenfile(filetypes=self.filetypes, mode="r")
         else:
-            opened_file = open(args_file, "r")
+            try:
+                opened_file = open(args_file, "r")
+            except FileNotFoundError:
+                self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.filenotfound"), "red")
+                return
         if (opened_file is not None):
             self.file = opened_file
             self.title("Text Editor - " + self.file.name.split("/")[-1])
@@ -123,7 +127,7 @@ class App(Tk):
         if (self.file is not None):
             subprocess.Popen(f'explorer /select,"{self.file.name.replace("/", "\\")}"')
         else:
-            self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.filenotfound"), "red")
+            self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.nofileopen"), "red")
 
     def show_message_status_frame(self, message: str, color: str = "black"):
         self.status_message_label.config(text=message, fg=color)
