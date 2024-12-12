@@ -22,5 +22,7 @@
     "editor.exit.ask_save": "Salvare le modifiche?",
     "font_page.label.font": "Tipo di carattere",
     "font_page.label.style": "Stile",
-    "font_page.label.size": "Grandezza"
+    "font_page.label.size": "Grandezza",
+    "font_page.button.accept": "Accetta",
+    "font_page.button.cancel": "Annulla"
 }
