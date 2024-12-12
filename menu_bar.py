@@ -6,12 +6,17 @@ import font_format
 def __file_menu(app: Tk, menubar: Menu) -> Menu:
     app.file_menu = Menu(menubar, tearoff=0)
 
+    app.recent_files_menu = Menu(app.file_menu, tearoff=0)
+    app.recent_files_menu.add_command(label=app.lang_dict.get("menubar.file.recent.clear"), command=lambda: clear_recent_file(app))
+    app.recent_files_menu.add_separator()
+
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.open"), command=app.open_file)
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.save"), command=app.save_file)
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.saveas"), command=app.save_as_file)
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.close"), command=app.close_file)
     app.file_menu.add_separator()
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.explorer"), command=app.show_in_explorer)
+    app.file_menu.add_cascade(label=app.lang_dict.get("menubar.file.recent"), menu=app.recent_files_menu)
     app.file_menu.add_separator()
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.exit"), command=app.xquit)
 
@@ -88,3 +93,14 @@ def __help_show_about(app: Tk):
 
     info_label = Label(info_frame, text="\n".join(info_content))
     info_label.grid(column=0, row=0, sticky="ew")
+
+
+def refresh_recent_file_menu(app: Tk, files: list = []):
+    app.recent_files_menu.delete(2, END)
+    for file in files:
+        app.recent_files_menu.add_command(label=file, command=lambda file=file: app.open_file(file))
+
+
+def clear_recent_file(app: Tk):
+    app.recent_files_menu.delete(2, END)
+    app.clear_recent_file_list()

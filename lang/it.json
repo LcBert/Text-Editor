@@ -6,6 +6,7 @@
     "menubar.file.close": "Chiudi",
     "menubar.file.explorer": "Mostra in Esplora Risorse",
     "menubar.file.recent": "File recenti",
+    "menubar.file.recent.clear": "Pulisci",
     "menubar.file.exit": "Esci",
     "menubar.format": "Formato",
     "menubar.format.wrap": "A capo automatico",

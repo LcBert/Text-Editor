@@ -28,7 +28,7 @@ class App(Tk):
         self.load_settings(file=file)
 
         self.title("Text Editor" + (" - " + self.file.name.split("/")[-1] if self.file is not None else ""))
-        self.geometry("600x400+100+100")
+        self.geometry("920x512+100+100")
         self.iconbitmap("img/appicon.ico")
         self.protocol("WM_DELETE_WINDOW", self.xquit)  # Handle exit with X window button
 
@@ -42,6 +42,7 @@ class App(Tk):
         self.grid_rowconfigure(0, weight=1)
 
         self.create_widgets()
+        self.add_file_to_recent_files()
 
     # Load Settings File #
     def load_settings(self, file=None, wrap_mode: Literal["word", "char", "none"] = "word", text: str = ""):
@@ -87,6 +88,7 @@ class App(Tk):
             self.editor_entry.delete("1.0", "end")
             self.editor_entry.insert("1.0", self.file.read())
             self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.open") % self.file.name.split("/")[-1])
+            self.add_file_to_recent_files(self.file)
 
     def save_file(self):
         text = self.editor_entry.get("1.0", "end").strip()
@@ -107,6 +109,7 @@ class App(Tk):
             self.file.write(text)
             self.file.flush()
             self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.save") % self.file.name.split("/")[-1])
+            self.add_file_to_recent_files(self.file)
 
     def close_file(self):
         if (self.file is not None):
@@ -125,6 +128,32 @@ class App(Tk):
     def show_message_status_frame(self, message: str, color: str = "black"):
         self.status_message_label.config(text=message, fg=color)
 
+    def add_file_to_recent_files(self, file=None):
+        with open("settings.json", "r") as settings_file:
+            settings = json.load(settings_file)
+            recent_files = settings.get("app.recent_files")
+            if (file is not None):
+                if (recent_files is None):
+                    recent_files = []
+                if (file.name not in recent_files):
+                    recent_files.append(file.name)
+                if (file.name in recent_files):
+                    recent_files.remove(file.name)
+                    # recent_files.append(file.name)
+                    recent_files.insert(0, file.name)
+            settings["app.recent_files"] = recent_files
+        with open("settings.json", "w") as settings_file:
+            settings_file.write(json.dumps(settings))
+        menu_bar.refresh_recent_file_menu(self, recent_files)
+
+    def clear_recent_file_list(self):
+        with open("settings.json", "r") as settings_file:
+            settings = json.load(settings_file)
+            settings["app.recent_files"] = []
+        with open("settings.json", "w") as settings_file:
+            settings_file.write(json.dumps(settings))
+        menu_bar.refresh_recent_file_menu(self, [])
+
     def restart(self):
         file = self.file
         wrap_mode = self.editor_entry.cget("wrap")
@@ -133,6 +162,7 @@ class App(Tk):
             child.destroy()
         self.load_settings(file, wrap_mode, text)
         self.create_widgets()
+        self.add_file_to_recent_files()
 
     def ask_save_on_exit(self):
         ask_exit: bool = messagebox.askyesnocancel("Text Editor", self.lang_dict.get("editor.exit.ask_save"))
