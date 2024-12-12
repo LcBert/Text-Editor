@@ -1,9 +1,10 @@
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 from typing import Literal
+import os
+import sys
 import subprocess
 import json
-import sys
 
 import menu_bar
 import editor_entry
@@ -20,6 +21,9 @@ class App(Tk):
             ("Text files", "*.txt"),
             ("All files", "*.*")
         ]
+
+        if getattr(sys, "frozen", False):
+            os.chdir(os.path.dirname(os.path.abspath(sys.executable)))
 
         self.load_settings(file=file)
 
@@ -40,7 +44,6 @@ class App(Tk):
         self.create_widgets()
 
     # Load Settings File #
-
     def load_settings(self, file=None, wrap_mode: Literal["word", "char", "none"] = "word", text: str = ""):
         self.file = file
         self.wrap_mode = wrap_mode
@@ -52,13 +55,14 @@ class App(Tk):
         with open("settings.json", "r") as settings_file:
             file_dict: dict = json.load(settings_file)
             self.lang_dict = json.load(open(f"lang/{file_dict.get("app.lang")}.json"))
+            self.language = file_dict.get("app.lang")
             self.font = file_dict.get("app.font")
 
     def create_widgets(self):
-        self.menubar: Menu = menu_bar.create_menu(self)
-        self.editor_entry, self.editor_entry_scrollbar = editor_entry.create_editor_entry(self)
+        menu_bar.create_menu(self)
+        editor_entry.create_editor_entry(self)
         ttk.Separator(self, orient="horizontal").grid(column=0, row=1, sticky="ew", columnspan=2)
-        self.status_frame, self.status_label = status_frame.create_status_frame(self)
+        status_frame.create_status_frame(self)
 
     def change_language(self, lang: str):
         with open("settings.json", "r") as settings_file:
@@ -70,6 +74,7 @@ class App(Tk):
 
     def edit_wrap_content(self, wrap_mode: Literal["word", "char", "none"]):
         self.editor_entry.config(wrap=wrap_mode)
+        self.status_wrap_mode_label.config(text=f"Wrap mode: {wrap_mode.capitalize()}")
 
     def open_file(self, args_file=None):
         if (args_file is None):
@@ -118,7 +123,7 @@ class App(Tk):
             self.show_message_status_frame(self.lang_dict.get("editor.statusmessage.filenotfound"), "red")
 
     def show_message_status_frame(self, message: str, color: str = "black"):
-        self.status_label.config(text=message, fg=color)
+        self.status_message_label.config(text=message, fg=color)
 
     def restart(self):
         file = self.file

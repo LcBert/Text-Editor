@@ -4,57 +4,55 @@ import font_format
 
 
 def __file_menu(app: Tk, menubar: Menu) -> Menu:
-    file_menu = Menu(menubar, tearoff=0)
+    app.file_menu = Menu(menubar, tearoff=0)
 
-    file_menu.add_command(label=app.lang_dict.get("menubar.file.open"), command=app.open_file)
-    file_menu.add_command(label=app.lang_dict.get("menubar.file.save"), command=app.save_file)
-    file_menu.add_command(label=app.lang_dict.get("menubar.file.saveas"), command=app.save_as_file)
-    file_menu.add_command(label=app.lang_dict.get("menubar.file.close"), command=app.close_file)
-    file_menu.add_separator()
-    file_menu.add_command(label=app.lang_dict.get("menubar.file.explorer"), command=app.show_in_explorer)
-    file_menu.add_separator()
-    file_menu.add_command(label=app.lang_dict.get("menubar.file.exit"), command=app.xquit)
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.open"), command=app.open_file)
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.save"), command=app.save_file)
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.saveas"), command=app.save_as_file)
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.close"), command=app.close_file)
+    app.file_menu.add_separator()
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.explorer"), command=app.show_in_explorer)
+    app.file_menu.add_separator()
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.exit"), command=app.xquit)
 
-    return file_menu
+    return app.file_menu
 
 
 def __format_menu(app: Tk, menubar: Menu) -> Menu:
-    format_menu = Menu(menubar, tearoff=0)
+    app.format_menu = Menu(menubar, tearoff=0)
 
-    format_wrap_submenu = Menu(format_menu, tearoff=0)
-    format_wrap_submenu.add_command(label=app.lang_dict.get("menubar.format.wrap.word"), command=lambda: app.edit_wrap_content("word"))
-    format_wrap_submenu.add_command(label=app.lang_dict.get("menubar.format.wrap.char"), command=lambda: app.edit_wrap_content("char"))
-    format_wrap_submenu.add_command(label=app.lang_dict.get("menubar.format.wrap.none"), command=lambda: app.edit_wrap_content("none"))
+    app.format_wrap_submenu = Menu(app.format_menu, tearoff=0)
+    app.format_wrap_submenu.add_command(label=app.lang_dict.get("menubar.format.wrap.word"), command=lambda: app.edit_wrap_content("word"))
+    app.format_wrap_submenu.add_command(label=app.lang_dict.get("menubar.format.wrap.char"), command=lambda: app.edit_wrap_content("char"))
+    app.format_wrap_submenu.add_command(label=app.lang_dict.get("menubar.format.wrap.none"), command=lambda: app.edit_wrap_content("none"))
 
-    format_language_submenu = Menu(format_menu, tearoff=0)
+    format_language_submenu = Menu(app.format_menu, tearoff=0)
     format_language_submenu.add_command(label="English", command=lambda: app.change_language("en"))
     format_language_submenu.add_command(label="Italiano", command=lambda: app.change_language("it"))
 
-    format_menu.add_cascade(label=app.lang_dict.get("menubar.format.wrap"), menu=format_wrap_submenu)
-    format_menu.add_command(label=app.lang_dict.get("menubar.format.font"), command=lambda: font_format.Page(app))
-    format_menu.add_separator()
-    format_menu.add_cascade(label=app.lang_dict.get("menubar.format.language"), menu=format_language_submenu)
+    app.format_menu.add_cascade(label=app.lang_dict.get("menubar.format.wrap"), menu=app.format_wrap_submenu)
+    app.format_menu.add_command(label=app.lang_dict.get("menubar.format.font"), command=lambda: font_format.Page(app))
+    app.format_menu.add_separator()
+    app.format_menu.add_cascade(label=app.lang_dict.get("menubar.format.language"), menu=format_language_submenu)
 
-    return format_menu
+    return app.format_menu
 
 
 def __help_menu(app: Tk, menubar: Menu) -> Menu:
-    help_menu = Menu(menubar, tearoff=0)
+    app.help_menu = Menu(menubar, tearoff=0)
 
-    help_menu.add_command(label=app.lang_dict.get("menubar.help.about"), command=lambda: __help_show_about(app))
+    app.help_menu.add_command(label=app.lang_dict.get("menubar.help.about"), command=lambda: __help_show_about(app))
 
-    return help_menu
+    return app.help_menu
 
 
-def create_menu(app: Tk) -> Menu:
-    menubar = Menu(app)
-    app.config(menu=menubar)
+def create_menu(app: Tk):
+    app.menubar = Menu(app)
+    app.config(menu=app.menubar)
 
-    menubar.add_cascade(label=app.lang_dict.get("menubar.file"), menu=__file_menu(app, menubar))
-    menubar.add_cascade(label=app.lang_dict.get("menubar.format"), menu=__format_menu(app, menubar))
-    menubar.add_cascade(label=app.lang_dict.get("menubar.help"), menu=__help_menu(app, menubar))
-
-    return menubar
+    app.menubar.add_cascade(label=app.lang_dict.get("menubar.file"), menu=__file_menu(app, app.menubar))
+    app.menubar.add_cascade(label=app.lang_dict.get("menubar.format"), menu=__format_menu(app, app.menubar))
+    app.menubar.add_cascade(label=app.lang_dict.get("menubar.help"), menu=__help_menu(app, app.menubar))
 
 
 def __help_show_about(app: Tk):
