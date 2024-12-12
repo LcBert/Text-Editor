@@ -3,6 +3,7 @@ from tkinter import ttk, filedialog, messagebox
 from typing import Literal
 import subprocess
 import json
+import sys
 
 import menu_bar
 import editor_entry
@@ -12,10 +13,10 @@ app: Tk = None
 
 
 class App(Tk):
-    def __init__(self):
+    def __init__(self, file=None):
         super().__init__()
 
-        self.file = None
+        self.file = file
         self.filetypes = [
             ("Text files", "*.txt"),
             ("All files", "*.*")
@@ -23,7 +24,7 @@ class App(Tk):
         self.wrap_mode = "word"
         self.text = ""
 
-        self.load_settings()
+        self.load_settings(self.file)
 
         self.title("Text Editor" + (" - " + self.file.name.split("/")[-1] if self.file is not None else ""))
         self.geometry("600x400+100+100")
@@ -32,12 +33,12 @@ class App(Tk):
 
         self.bind("<Control-o>", lambda event: self.open_file())  # Control + O -> Open File
         self.bind("<Control-s>", lambda event: self.save_file())  # Control + S -> Save File
-        self.bind("<Control-S>", lambda event: self.save_as_file())  # Control + Shift + S -> Save File
+        self.bind("<Control-S>", lambda event: self.save_as_file())  # Control + Shift + S -> Save File As
         self.bind("<Control-q>", lambda event: self.close_file())  # Control + Q -> Close File
         self.bind("<Control-e>", lambda event: self.show_in_explorer())  # Control + E -> Show in Explorer
 
         self.grid_columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
         self.create_widgets()
 
@@ -151,5 +152,14 @@ class App(Tk):
 
 
 if __name__ == "__main__":
-    app = App()
-    app.start()
+    if len(sys.argv) > 1:
+        print("a")
+        file_to_open = open(sys.argv[1].replace("\\", "/"))
+        app = App(file_to_open)
+        app.start()
+        file_to_open.close()
+
+    else:
+        print("b")
+        app = App()
+        app.start()
