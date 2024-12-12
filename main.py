@@ -16,15 +16,12 @@ class App(Tk):
     def __init__(self, file=None):
         super().__init__()
 
-        self.file = file
         self.filetypes = [
             ("Text files", "*.txt"),
             ("All files", "*.*")
         ]
-        self.wrap_mode = "word"
-        self.text = ""
 
-        self.load_settings(self.file)
+        self.load_settings(file=file)
 
         self.title("Text Editor" + (" - " + self.file.name.split("/")[-1] if self.file is not None else ""))
         self.geometry("600x400+100+100")
@@ -43,10 +40,15 @@ class App(Tk):
         self.create_widgets()
 
     # Load Settings File #
+
     def load_settings(self, file=None, wrap_mode: Literal["word", "char", "none"] = "word", text: str = ""):
         self.file = file
         self.wrap_mode = wrap_mode
-        self.text = text
+        if (self.file is not None):
+            with (open(self.file.name, "r")) as file:
+                self.text = file.read()
+        else:
+            self.text = text
         with open("settings.json", "r") as settings_file:
             file_dict: dict = json.load(settings_file)
             self.lang_dict = json.load(open(f"lang/{file_dict.get("app.lang")}.json"))
@@ -153,13 +155,10 @@ class App(Tk):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        print("a")
         file_to_open = open(sys.argv[1].replace("\\", "/"))
         app = App(file_to_open)
         app.start()
         file_to_open.close()
-
     else:
-        print("b")
         app = App()
         app.start()
