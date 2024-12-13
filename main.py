@@ -155,7 +155,6 @@ class App(Tk):
                     recent_files.append(file.name)
                 if (file.name in recent_files):
                     recent_files.remove(file.name)
-                    # recent_files.append(file.name)
                     recent_files.insert(0, file.name)
             settings["app.recent_files"] = recent_files
             while (len(recent_files) > 20):
