@@ -32,6 +32,7 @@ class App(Tk):
         self.iconbitmap("img/appicon.ico")
         self.protocol("WM_DELETE_WINDOW", self.xquit)  # Handle exit with X window button
 
+        # Key bindings
         self.bind("<Control-n>", lambda event: self.clear_app())  # Control + N -> New File
         self.bind("<Control-N>", lambda event: self.new_window())  # Control + Shift + N -> New Window
         self.bind("<Control-o>", lambda event: self.open_file())  # Control + O -> Open File
@@ -39,6 +40,7 @@ class App(Tk):
         self.bind("<Control-S>", lambda event: self.save_as_file())  # Control + Shift + S -> Save File As
         self.bind("<Control-q>", lambda event: self.close_file())  # Control + Q -> Close File
         self.bind("<Control-e>", lambda event: self.show_in_explorer())  # Control + E -> Show in Explorer
+        self.bind("<Control-w>", lambda event: self.xquit())  # Control + W -> Quit Application
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -156,6 +158,8 @@ class App(Tk):
                     # recent_files.append(file.name)
                     recent_files.insert(0, file.name)
             settings["app.recent_files"] = recent_files
+            while (len(recent_files) > 20):
+                recent_files.pop()
         with open("settings.json", "w") as settings_file:
             settings_file.write(json.dumps(settings))
         menu_bar.refresh_recent_file_menu(self, recent_files)

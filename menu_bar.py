@@ -20,7 +20,7 @@ def __file_menu(app: Tk, menubar: Menu) -> Menu:
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.explorer"), accelerator="Ctrl+E", command=app.show_in_explorer)
     app.file_menu.add_cascade(label=app.lang_dict.get("menubar.file.recent"), menu=app.recent_files_menu)
     app.file_menu.add_separator()
-    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.exit"), command=app.xquit)
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.exit"), accelerator="Ctrl+W", command=app.xquit)
 
     return app.file_menu
 
