@@ -78,7 +78,7 @@ def __help_show_about(app: Tk):
     about_window.title(app.lang_dict.get("menubar.help.about"))
     about_window.geometry("300x150")
     about_window.resizable(False, False)
-    about_window.wm_attributes("-toolwindow", True)
+    about_window.transient(app)
     about_window.wm_attributes("-topmost", True)
 
     about_window.grid_columnconfigure(0, weight=1)

@@ -10,7 +10,7 @@ class Page():
         self.page = Toplevel(app)
         self.page.title("Font")
         self.page.resizable(False, False)
-        self.page.wm_attributes("-toolwindow", True)
+        self.page.transient(app)
         self.page.wm_attributes("-topmost", True)
         self.page.bind("<Return>", lambda event: self.change_font())
         self.page.bind("<Escape>", lambda event: self.page.destroy())
