@@ -10,6 +10,8 @@ def __file_menu(app: Tk, menubar: Menu) -> Menu:
     app.recent_files_menu.add_command(label=app.lang_dict.get("menubar.file.recent.clear"), command=lambda: clear_recent_file(app))
     app.recent_files_menu.add_separator()
 
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.new"), accelerator="Ctrl+N", command=app.clear_app)
+    app.file_menu.add_command(label=app.lang_dict.get("menubar.file.new_window"), accelerator="Ctrl+Shift+N", command=app.new_window)
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.open"), accelerator="Ctrl+O", command=app.open_file)
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.save"), accelerator="Ctrl+S", command=app.save_file)
     app.file_menu.add_command(label=app.lang_dict.get("menubar.file.saveas"), accelerator="Ctrl+Shift+S", command=app.save_as_file)

@@ -1,5 +1,7 @@
 {
     "menubar.file": "File",
+    "menubar.file.new": "Nuovo",
+    "menubar.file.new_window": "Nuova Finestra",
     "menubar.file.open": "Apri",
     "menubar.file.save": "Salva",
     "menubar.file.saveas": "Salva con nome",

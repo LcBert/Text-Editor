@@ -32,6 +32,8 @@ class App(Tk):
         self.iconbitmap("img/appicon.ico")
         self.protocol("WM_DELETE_WINDOW", self.xquit)  # Handle exit with X window button
 
+        self.bind("<Control-n>", lambda event: self.clear_app())  # Control + N -> New File
+        self.bind("<Control-N>", lambda event: self.new_window())  # Control + Shift + N -> New Window
         self.bind("<Control-o>", lambda event: self.open_file())  # Control + O -> Open File
         self.bind("<Control-s>", lambda event: self.save_file())  # Control + S -> Save File
         self.bind("<Control-S>", lambda event: self.save_as_file())  # Control + Shift + S -> Save File As
@@ -42,7 +44,7 @@ class App(Tk):
         self.grid_rowconfigure(0, weight=1)
 
         self.create_widgets()
-        self.add_file_to_recent_files()
+        self.add_file_to_recent_files(file=file)
 
     # Load Settings File #
     def load_settings(self, file=None, wrap_mode: Literal["word", "char", "none"] = "word", text: str = ""):
@@ -76,6 +78,14 @@ class App(Tk):
     def edit_wrap_content(self, wrap_mode: Literal["word", "char", "none"]):
         self.editor_entry.config(wrap=wrap_mode)
         self.status_wrap_mode_label.config(text=f"Wrap mode: {wrap_mode.capitalize()}")
+
+    def clear_app(self):
+        self.editor_entry.delete("1.0", "end")
+        self.file = None
+        self.title("Text Editor")
+
+    def new_window(self):
+        subprocess.Popen(sys.argv[0])
 
     def open_file(self, args_file=None):
         if (args_file is None):
