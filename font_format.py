@@ -5,7 +5,6 @@ import json
 
 class Page():
     def __init__(self, app: Tk):
-        super().__init__()
         self.app = app
         self.page = Toplevel(app)
         self.page.title("Font")

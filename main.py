@@ -5,6 +5,7 @@ import os
 import sys
 import subprocess
 import json
+import webbrowser
 
 import menu_bar
 import editor_entry
@@ -203,6 +204,10 @@ class App(Tk):
 
     def start(self):
         self.mainloop()
+
+    def open_link(self, link: str):
+        # subprocess.Popen(f"start {link}")
+        webbrowser.open(link)
 
 
 if __name__ == "__main__":

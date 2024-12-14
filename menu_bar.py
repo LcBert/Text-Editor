@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
+
 import font_format
+import about_page
 
 
 def __file_menu(app: Tk, menubar: Menu) -> Menu:
@@ -54,7 +56,7 @@ def __app_menu(app: Tk, menubar: Menu) -> Menu:
 def __help_menu(app: Tk, menubar: Menu) -> Menu:
     app.help_menu = Menu(menubar, tearoff=0)
 
-    app.help_menu.add_command(label=app.lang_dict.get("menubar.help.about"), command=lambda: __help_show_about(app))
+    app.help_menu.add_command(label=app.lang_dict.get("menubar.help.about"), command=lambda: about_page.Page(app))
 
     return app.help_menu
 
@@ -67,42 +69,6 @@ def create_menu(app: Tk):
     app.menubar.add_cascade(label=app.lang_dict.get("menubar.format"), menu=__format_menu(app, app.menubar))
     app.menubar.add_cascade(label=app.lang_dict.get("menubar.app"), menu=__app_menu(app, app.menubar))
     app.menubar.add_cascade(label=app.lang_dict.get("menubar.help"), menu=__help_menu(app, app.menubar))
-
-
-def __help_show_about(app: Tk):
-    info_content = [
-        "Version 1.0",
-        "Author: Luca Bertaggia"
-    ]
-    about_window = Toplevel(app)
-    about_window.title(app.lang_dict.get("menubar.help.about"))
-    about_window.iconbitmap("img/appicon.ico")
-    about_window.geometry("300x150")
-    about_window.resizable(False, False)
-    about_window.transient(app)
-    about_window.wm_attributes("-topmost", True)
-
-    about_window.grid_columnconfigure(0, weight=1)
-    about_window.grid_rowconfigure(1, weight=1)
-
-    title_frame = Frame(about_window)
-    title_frame.grid(column=0, row=0, sticky="ew")
-
-    appicon = PhotoImage(file="img/appicon.png")
-    image_label = Label(title_frame, image=appicon)
-    image_label.image = appicon  # keep a reference to the image
-    image_label.grid(column=0, row=0)
-
-    title_label = Label(title_frame, text="Text Editor", font=("Arial", 20))
-    title_label.grid(column=1, row=0)
-
-    ttk.Separator(about_window, orient="horizontal").grid(column=0, row=1, sticky="ew")
-
-    info_frame = Frame(about_window)
-    info_frame.grid(column=0, row=2, sticky="nsew")
-
-    info_label = Label(info_frame, text="\n".join(info_content))
-    info_label.grid(column=0, row=0, sticky="ew")
 
 
 def refresh_recent_file_menu(app: Tk, files: list = []):
