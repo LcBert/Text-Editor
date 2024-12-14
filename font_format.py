@@ -9,6 +9,7 @@ class Page():
         self.app = app
         self.page = Toplevel(app)
         self.page.title("Font")
+        self.page.iconbitmap("img/appicon.ico")
         self.page.resizable(False, False)
         self.page.transient(app)
         self.page.wm_attributes("-topmost", True)

@@ -76,6 +76,7 @@ def __help_show_about(app: Tk):
     ]
     about_window = Toplevel(app)
     about_window.title(app.lang_dict.get("menubar.help.about"))
+    about_window.iconbitmap("img/appicon.ico")
     about_window.geometry("300x150")
     about_window.resizable(False, False)
     about_window.transient(app)
