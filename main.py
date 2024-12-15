@@ -209,6 +209,14 @@ class App(Tk):
         # subprocess.Popen(f"start {link}")
         webbrowser.open(link)
 
+    def insert_text(self, text: str, position: Literal["start", "end", "cursor"] = "cursor"):
+        if (position == "start"):
+            self.editor_entry.insert("1.0", text)
+        elif (position == "end"):
+            self.editor_entry.insert("end", text)
+        elif (position == "cursor"):
+            self.editor_entry.insert("insert", text)
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

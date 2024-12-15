@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import datetime
 
 import font_format
 import about_page
@@ -41,6 +42,15 @@ def __format_menu(app: Tk, menubar: Menu) -> Menu:
     return app.format_menu
 
 
+def __insert_menu(app: Tk, menubar: Menu) -> Menu:
+    app.insert_menu = Menu(menubar, tearoff=0)
+
+    app.insert_menu.add_command(label=app.lang_dict.get("menubar.insert.date"), command=lambda: app.insert_text(datetime.datetime.now().strftime("%Y-%m-%d"), "cursor"))
+    app.insert_menu.add_command(label=app.lang_dict.get("menubar.insert.hour"), command=lambda: app.insert_text(datetime.datetime.now().strftime("%H:%M"), "cursor"))
+
+    return app.insert_menu
+
+
 def __app_menu(app: Tk, menubar: Menu) -> Menu:
     app.app_menu = Menu(menubar, tearoff=0)
 
@@ -67,6 +77,7 @@ def create_menu(app: Tk):
 
     app.menubar.add_cascade(label=app.lang_dict.get("menubar.file"), menu=__file_menu(app, app.menubar))
     app.menubar.add_cascade(label=app.lang_dict.get("menubar.format"), menu=__format_menu(app, app.menubar))
+    app.menubar.add_cascade(label=app.lang_dict.get("menubar.insert"), menu=__insert_menu(app, app.menubar))
     app.menubar.add_cascade(label=app.lang_dict.get("menubar.app"), menu=__app_menu(app, app.menubar))
     app.menubar.add_cascade(label=app.lang_dict.get("menubar.help"), menu=__help_menu(app, app.menubar))
 

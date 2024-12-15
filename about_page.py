@@ -12,6 +12,8 @@ links = {
     "Instagram": "https://www.instagram.com/luca___bert/"
 }
 
+link_labels = []
+
 
 class Page():
     def __init__(self, app: Tk):
@@ -67,3 +69,4 @@ class Page():
                 "<Button-1>",
                 lambda event, link=links.get(link): self.app.open_link(link)
             )
+            link_labels.append(label)
