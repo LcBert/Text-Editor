@@ -206,7 +206,6 @@ class App(Tk):
         self.mainloop()
 
     def open_link(self, link: str):
-        # subprocess.Popen(f"start {link}")
         webbrowser.open(link)
 
     def insert_text(self, text: str, position: Literal["start", "end", "cursor"] = "cursor"):

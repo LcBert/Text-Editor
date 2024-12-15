@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import datetime
 
-import font_format
+import font_page
 import about_page
 
 
@@ -37,7 +37,7 @@ def __format_menu(app: Tk, menubar: Menu) -> Menu:
     app.format_wrap_submenu.add_command(label=app.lang_dict.get("menubar.format.wrap.none"), command=lambda: app.edit_wrap_content("none"))
 
     app.format_menu.add_cascade(label=app.lang_dict.get("menubar.format.wrap"), menu=app.format_wrap_submenu)
-    app.format_menu.add_command(label=app.lang_dict.get("menubar.format.font"), command=lambda: font_format.Page(app))
+    app.format_menu.add_command(label=app.lang_dict.get("menubar.format.font"), command=lambda: font_page.Page(app))
 
     return app.format_menu
 
